@@ -24,11 +24,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients
                 .inMemory()
-                .withClient("web-client")
-                .secret(passwordEncoder.encode("1234"))
-                .authorizedGrantTypes("password")
-                .scopes("write", "read")
-                .accessTokenValiditySeconds(60 * 60 * 6); // 6 hours (default is 12 hours)
+                    .withClient("web-client")
+                    .secret(passwordEncoder.encode("1234"))
+                    .authorizedGrantTypes("password")
+                    .scopes("write", "read")
+                    .accessTokenValiditySeconds(60 * 60 * 6) // 6 hours (default is 12 hours)
+                .and()
+                        .withClient("checktoken")
+                        .secret(passwordEncoder.encode("check1234"));
     }
 
     @Override
