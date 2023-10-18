@@ -34,6 +34,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .scopes("write", "read")
                     .accessTokenValiditySeconds(60 * 60 * 6) // 6 hours (default is 12 hours)
                     .refreshTokenValiditySeconds(7 * 24 * 60 * 60) // 7 days
+
                 .and()
                     .withClient("any-back-end-application")
                     .secret(passwordEncoder.encode("1234"))
@@ -44,11 +45,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 * http://localhost:8081/oauth/authorize?response_type=code&client_id=any-front-end-application&state=abcd&redirect_uri=http://client-app-url
                 * */
                 .and()
-                    .withClient("any-front-end-application")
+                    .withClient("client-oauth2-authorization-code")
                     .secret(passwordEncoder.encode("1234"))
                     .authorizedGrantTypes("authorization_code")
                     .scopes("write", "read")
-                    .redirectUris("http://client-app-url")
+                    .redirectUris("http://localhost:8082")
+
                 .and()
                         .withClient("checktoken")
                         .secret(passwordEncoder.encode("check1234"));
