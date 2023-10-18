@@ -39,6 +39,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .secret(passwordEncoder.encode("1234"))
                     .authorizedGrantTypes("client_credentials")
                     .scopes("write", "read")
+                /*
+                * It must request a code by the url
+                * http://localhost:8081/oauth/authorize?response_type=code&client_id=any-front-end-application&state=abcd&redirect_uri=http://client-app-url
+                * */
+                .and()
+                    .withClient("any-front-end-application")
+                    .secret(passwordEncoder.encode("1234"))
+                    .authorizedGrantTypes("authorization_code")
+                    .scopes("write", "read")
+                    .redirectUris("http://client-app-url")
                 .and()
                         .withClient("checktoken")
                         .secret(passwordEncoder.encode("check1234"));
