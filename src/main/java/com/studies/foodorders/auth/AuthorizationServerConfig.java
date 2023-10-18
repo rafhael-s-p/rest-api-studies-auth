@@ -35,6 +35,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .accessTokenValiditySeconds(60 * 60 * 6) // 6 hours (default is 12 hours)
                     .refreshTokenValiditySeconds(7 * 24 * 60 * 60) // 7 days
                 .and()
+                    .withClient("any-back-end-application")
+                    .secret(passwordEncoder.encode("1234"))
+                    .authorizedGrantTypes("client_credentials")
+                    .scopes("write", "read")
+                .and()
                         .withClient("checktoken")
                         .secret(passwordEncoder.encode("check1234"));
     }
