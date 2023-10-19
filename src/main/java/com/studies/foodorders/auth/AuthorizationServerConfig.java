@@ -10,6 +10,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableAuthorizationServer
@@ -42,7 +46,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .scopes("write", "read")
                 /*
                 * It must request a code by the url
-                * http://localhost:8081/oauth/authorize?response_type=code&client_id=any-front-end-application&state=abcd&redirect_uri=http://client-app-url
+                * http://localhost:8081/oauth/authorize?response_type=code&client_id=client-oauth2-authorization-code&state=abcd&redirect_uri=http://localhost:8082
+                *
+                * PKCE Plain
+                * http://localhost:8081/oauth/authorize?response_type=code&client_id=client-oauth2-authorization-code&redirect_uri=http://localhost:8082&code_challenge=ABcd&code_challenge_method=plain
+                *
+                * PKCE SHA-256
+                * http://localhost:8081/oauth/authorize?response_type=code&client_id=client-oauth2-authorization-code&redirect_uri=http://localhost:8082&code_challenge=F4BP93803TyWD7lruWDpi3BDrPuIYFUlaboOSVCANiM&code_challenge_method=s256
+                *
+                * Link to generate Code Verifier and Code Challenge
+                * https://tonyxu-io.github.io/pkce-generator/
+                *
                 * */
                 .and()
                     .withClient("client-oauth2-authorization-code")
@@ -52,7 +66,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .redirectUris("http://localhost:8082")
                 /*
                  * It must request a code by the url
-                 * http://localhost:8081/oauth/authorize?response_type=token&client_id=implicit-grant-type-user&state=abcd&redirect_uri=http://client-app-url
+                 * http://localhost:8081/oauth/authorize?response_type=token&client_id=implicit-grant-type-user&state=abcd&redirect_uri=http://localhost:8082
                  * */
                 .and()
                     .withClient("implicit-grant-type-user")
@@ -75,7 +89,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
-                .reuseRefreshTokens(false);;
+                .reuseRefreshTokens(false)
+                .tokenGranter(tokenGranter(endpoints));
+    }
+
+    private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
+        var pkceAuthorizationCodeTokenGranter = new PkceAuthorizationCodeTokenGranter(endpoints.getTokenServices(),
+                endpoints.getAuthorizationCodeServices(), endpoints.getClientDetailsService(),
+                endpoints.getOAuth2RequestFactory());
+
+        var granters = Arrays.asList(
+                pkceAuthorizationCodeTokenGranter, endpoints.getTokenGranter());
+
+        return new CompositeTokenGranter(granters);
     }
 
 }
