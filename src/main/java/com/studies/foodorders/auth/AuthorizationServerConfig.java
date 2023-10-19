@@ -50,10 +50,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .authorizedGrantTypes("authorization_code")
                     .scopes("write", "read")
                     .redirectUris("http://localhost:8082")
-
+                /*
+                 * It must request a code by the url
+                 * http://localhost:8081/oauth/authorize?response_type=token&client_id=implicit-grant-type-user&state=abcd&redirect_uri=http://client-app-url
+                 * */
                 .and()
-                        .withClient("checktoken")
-                        .secret(passwordEncoder.encode("check1234"));
+                    .withClient("implicit-grant-type-user")
+                    .authorizedGrantTypes("implicit")
+                    .scopes("write", "read")
+                    .redirectUris("http://localhost:8082")
+                .and()
+                    .withClient("checktoken")
+                    .secret(passwordEncoder.encode("check1234"));
     }
 
     @Override
