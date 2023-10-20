@@ -1,0 +1,10 @@
+version: '3'
+services:
+  redis:
+    image: redis:6.0
+    container_name: redis-food
+    ports:
+      - "6379:6379"
+    volumes:
+      - ~/food-redis-data:/data
+    command: redis-server --appendonly yes
