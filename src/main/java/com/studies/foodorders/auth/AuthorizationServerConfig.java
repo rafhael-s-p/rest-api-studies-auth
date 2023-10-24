@@ -88,7 +88,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
 //		security.checkTokenAccess("isAuthenticated()"); It's necessary to set client user and password
-        security.checkTokenAccess("permitAll()");
+        security.checkTokenAccess("permitAll()")
+                .tokenKeyAccess("permitAll()");
     }
 
     @Override
