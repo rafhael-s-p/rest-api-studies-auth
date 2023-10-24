@@ -1,4 +1,4 @@
-package com.studies.foodorders.auth;
+package com.studies.foodorders.auth.core;
 
 import javax.validation.constraints.NotBlank;
 

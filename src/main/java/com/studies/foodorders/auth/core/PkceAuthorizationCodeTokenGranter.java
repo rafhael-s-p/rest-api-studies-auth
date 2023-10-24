@@ -1,4 +1,4 @@
-package com.studies.foodorders.auth;
+package com.studies.foodorders.auth.core;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.security.crypto.codec.Utf8;

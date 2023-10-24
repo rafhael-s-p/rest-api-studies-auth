@@ -1,4 +1,4 @@
-package com.studies.foodorders.auth;
+package com.studies.foodorders.auth.core;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
