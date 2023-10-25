@@ -10,12 +10,14 @@ import java.util.Collections;
 public class AuthUser extends User {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	private Long userId;
 	private String fullName;
 	
 	public AuthUser(Users users) {
 		super(users.getEmail(), users.getPassword(), Collections.emptyList());
 		
+		this.userId = users.getId();
 		this.fullName = users.getName();
 	}
 	
