@@ -46,7 +46,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .withClient("web-client")
                     .secret(passwordEncoder.encode("1234"))
                     .authorizedGrantTypes("password", "refresh_token")
-                    .scopes("write", "read")
+                    .scopes("WRITE", "READ")
                     .accessTokenValiditySeconds(60 * 60 * 6) // 6 hours (default is 12 hours)
                     .refreshTokenValiditySeconds(7 * 24 * 60 * 60) // 7 days
 
@@ -54,7 +54,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .withClient("any-back-end-application")
                     .secret(passwordEncoder.encode("1234"))
                     .authorizedGrantTypes("client_credentials")
-                    .scopes("write", "read")
+                    .scopes("WRITE", "READ")
                 /*
                 * It must request a code by the url
                 * http://localhost:8081/oauth/authorize?response_type=code&client_id=client-oauth2-authorization-code&state=abcd&redirect_uri=http://localhost:8082
@@ -73,7 +73,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .withClient("client-oauth2-authorization-code")
                     .secret(passwordEncoder.encode("1234"))
                     .authorizedGrantTypes("authorization_code")
-                    .scopes("write", "read")
+                    .scopes("WRITE", "READ")
                     .redirectUris("http://localhost:8082")
                 /*
                  * It must request a code by the url
@@ -82,7 +82,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .and()
                     .withClient("implicit-grant-type-user")
                     .authorizedGrantTypes("implicit")
-                    .scopes("write", "read")
+                    .scopes("WRITE", "READ")
                     .redirectUris("http://localhost:8082")
                 .and()
                     .withClient("checktoken")
